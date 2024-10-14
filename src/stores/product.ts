@@ -69,7 +69,7 @@ export const useProductStore = defineStore('product', {
       }
     },
 
-    async createProduct(product: Product) {
+    async createProduct(product: any) {
       this.loading = true
       this.error = null
 
@@ -113,7 +113,7 @@ export const useProductStore = defineStore('product', {
         this.loading = false
       }
     },
-    async updateProduct(product: Product) {
+    async updateProduct(product: any) {
       this.loading = true
       this.error = null
 

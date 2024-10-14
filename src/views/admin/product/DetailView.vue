@@ -94,7 +94,7 @@
         />
         <div v-if="isEdit && product.image" class="mt-3">
           <img
-            :src="product.image"
+            :src="typeof product.image === 'string' ? product.image : ''"
             alt="Product Image"
             class="img-thumbnail"
             style="max-width: 100px; max-height: 100px"
