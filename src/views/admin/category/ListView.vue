@@ -1,36 +1,47 @@
 <template>
-  <main class="container py-4">
+  <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="mb-0">Categories</h1>
+      <h1 class="h3">Categories</h1>
       <button @click="toggleForm" class="btn btn-primary">
         {{ showForm ? 'Cancel' : 'Add Category' }}
       </button>
     </div>
 
-    <div v-if="showForm" class="card mb-4">
+    <div v-if="showForm" class="card mb-4 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">Add New Category</h5>
+      </div>
       <div class="card-body">
-        <h5 class="card-title">Add New Category</h5>
-        <div class="mb-3">
-          <label for="categoryName" class="form-label">Category Name</label>
-          <input
-            type="text"
-            id="categoryName"
-            v-model="newCategory.name"
-            class="form-control"
-            placeholder="Name"
-          />
-
-          <label for="categoryDescription" class="form-label">Category Description</label>
-          <input
-            type="text"
-            id="categoryDescription"
-            v-model="newCategory.description"
-            class="form-control"
-            placeholder="Description"
-          />
-        </div>
-
-        <button @click="saveCategory" class="btn btn-success">Save</button>
+        <form @submit.prevent="saveCategory">
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Category Name</label>
+            <input
+              type="text"
+              id="categoryName"
+              v-model="newCategory.name"
+              class="form-control"
+              placeholder="Enter category name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="categoryDescription" class="form-label">Category Description</label>
+            <textarea
+              id="categoryDescription"
+              v-model="newCategory.description"
+              class="form-control"
+              placeholder="Enter category description"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="button" @click="showForm = false" class="btn btn-secondary me-2">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-success">Save</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -48,8 +59,8 @@
 
     <!-- Categories Table -->
     <div v-if="!loading && categories.length" class="table-responsive">
-      <table class="table table-hover">
-        <thead class="table-light">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col" class="text-nowrap">Category Name</th>
@@ -99,10 +110,10 @@
               </div>
               <div v-else class="d-flex justify-content-start mt-2">
                 <button @click="updateCategory(category)" class="btn btn-success btn-sm me-2">
-                  Save
+                  <i class="material-icons">save</i>
                 </button>
                 <button @click="finishEditing(category)" class="btn btn-secondary btn-sm">
-                  Cancel
+                  <i class="material-icons">cancel</i>
                 </button>
               </div>
             </td>
