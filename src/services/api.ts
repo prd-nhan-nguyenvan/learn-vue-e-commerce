@@ -1084,6 +1084,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     productsProductsList: (
       query?: {
+        /** category */
+        category?: string
+        /** price */
+        price?: string
+        /** Which field to use when ordering the results. */
+        ordering?: string
+        /** A search term. */
+        search?: string
         /** Number of results to return per page. */
         limit?: number
         /** The initial index from which to return the results. */
@@ -1106,7 +1114,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         query: query,
         secure: true,
-        type: ContentType.UrlEncoded,
         format: 'json',
         ...params
       }),
@@ -1119,43 +1126,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/products/products/
      * @secure
      */
-    productsProductsCreate: (
-      data: {
-        category: number
-        /**
-         * @minLength 1
-         * @maxLength 255
-         */
-        name: string
-        /**
-         * @format slug
-         * @maxLength 50
-         * @pattern ^[-a-zA-Z0-9_]+$
-         */
-        slug?: string
-        /** @minLength 1 */
-        description: string
-        /** @format decimal */
-        price: string
-        /** @format decimal */
-        sell_price: string
-        on_sell?: boolean
-        /**
-         * @min 0
-         * @max 4294967295
-         */
-        stock: number
-        /** @format binary */
-        image?: File | null
-      },
-      params: RequestParams = {}
-    ) =>
+    productsProductsCreate: (data: Product, params: RequestParams = {}) =>
       this.request<Product, any>({
         path: `/products/products/`,
         method: 'POST',
         body: data,
         secure: true,
-        type: ContentType.FormData,
+        type: ContentType.Json,
         format: 'json',
         ...params
       }),
