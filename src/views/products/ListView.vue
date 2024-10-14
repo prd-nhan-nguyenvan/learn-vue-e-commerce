@@ -1,15 +1,19 @@
 <template>
   <!-- Product Card Grid View -->
-  <div class="container">
+  <div class="container py-5">
     <div class="row">
-      <div class="row">
-        <div
-          v-for="product in products"
-          :key="product.id"
-          class="col-lg-4 col-md-6 col-sm-6 d-flex"
-        >
-          <ProductCart :product="product" />
-        </div>
+      <div class="col-12 text-center mb-4">
+        <h1 class="display-4">Our Products</h1>
+        <p class="lead">Browse through our exclusive collection</p>
+      </div>
+    </div>
+    <div class="row">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+      >
+        <ProductCart :product="product" />
       </div>
     </div>
   </div>
