@@ -10,7 +10,7 @@
               ? product.image
               : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdD7G7FFg1UKZFXhyP45b4AvY-qKEFvfjj3w&s'
           "
-          class="img-fluid"
+          class="img-fluid rounded shadow-sm"
           alt=""
         />
       </div>
@@ -19,10 +19,10 @@
       <!--Grid column-->
       <div class="col-md-6 mb-4">
         <!--Content-->
-        <div class="p-4">
+        <div class="p-4 border rounded shadow-sm">
           <div class="mb-3">
             <a href="">
-              <span class="badge bg-dark me-1">{{ getCategoryName(product?.category) }}</span>
+              <span class="badge bg-dark me-1" v-if="!loading">{{ categoryName }}</span>
             </a>
             <a href="">
               <span class="badge bg-info me-1">New</span>
@@ -36,19 +36,19 @@
             <h5 class="me-1">
               <s>{{ formatCurrency(product.price) }}</s>
             </h5>
-            <span class="mb-1 me-1"> {{ formatCurrency(product.sell_price) }}</span>
+            <span class="mb-1 me-1 text-success"> {{ formatCurrency(product.sell_price) }}</span>
           </div>
           <div class="lead" v-else>
             <span class="mb-1 me-1">{{ formatCurrency(product?.price) }}</span>
           </div>
 
-          <strong><p style="font-size: 20px">Description</p></strong>
+          <strong><p class="mt-4" style="font-size: 20px">Description</p></strong>
 
           <p>
             {{ product?.description }}
           </p>
 
-          <form class="d-flex justify-content-left">
+          <form class="d-flex justify-content-left align-items-center">
             <!-- Default input -->
             <div class="form-outline me-1" style="width: 100px">
               <input type="number" value="1" class="form-control" />
@@ -86,7 +86,7 @@
       <div class="col-lg-4 col-md-12 mb-4">
         <img
           src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
-          class="img-fluid"
+          class="img-fluid rounded shadow-sm"
           alt=""
         />
       </div>
@@ -96,7 +96,7 @@
       <div class="col-lg-4 col-md-6 mb-4">
         <img
           src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
-          class="img-fluid"
+          class="img-fluid rounded shadow-sm"
           alt=""
         />
       </div>
@@ -106,7 +106,7 @@
       <div class="col-lg-4 col-md-6 mb-4">
         <img
           src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
-          class="img-fluid"
+          class="img-fluid rounded shadow-sm"
           alt=""
         />
       </div>
@@ -119,23 +119,54 @@
 <script setup lang="ts">
 import { useCategoryStore } from '@/stores/category'
 import { useProductStore } from '@/stores/product'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { formatCurrency, getCategoryName } from '@/helpers'
+
+const loading = ref(false)
 
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 const route = useRoute()
 
 const product = computed(() => productStore.selectedProduct)
+const categoryName = ref('')
+
+const fetchCategoryName = async () => {
+  const category = product.value?.category
+  if (category) {
+    loading.value = true
+    categoryName.value = await getCategoryName(category)
+    loading.value = false
+  }
+}
 
 onMounted(async () => {
   await categoryStore.fetchCategories()
   try {
     const slug = route.params.slug
-    if (slug) {
+    if (typeof slug === 'string') {
       await productStore.getProductBySlug(slug)
+      await fetchCategoryName()
+    } else {
+      console.error('Invalid slug:', slug)
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
+})
+
+console.log('🚀 ~ categoryName ~ categoryName:', categoryName)
+
+onMounted(async () => {
+  await categoryStore.fetchCategories()
+  try {
+    const slug = route.params.slug
+    if (typeof slug === 'string') {
+      await productStore.getProductBySlug(slug)
+    } else {
+      console.error('Invalid slug:', slug)
     }
   } catch (error) {
     console.error('Error fetching data:', error)

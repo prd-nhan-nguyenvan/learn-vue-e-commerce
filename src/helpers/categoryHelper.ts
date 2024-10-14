@@ -1,8 +1,12 @@
 import { getCategoryById } from '@/services/product.service'
 
-export const getCategoryName = async (categoryId: number | undefined) => {
-  if (!categoryId) return 'Unknown'
+export const getCategoryName = (categoryId: number | undefined): Promise<string> => {
+  if (!categoryId) return Promise.resolve('Unknown')
 
-  const category = await getCategoryById(categoryId)
-  return category ? category.name : 'Unknown'
+  return getCategoryById(categoryId)
+    .then((category) => {
+      console.log('🚀 ~ getCategoryName ~ category:', category)
+      return category ? category.name : 'Unknown'
+    })
+    .catch(() => 'Unknown')
 }
