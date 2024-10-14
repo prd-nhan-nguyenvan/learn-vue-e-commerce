@@ -36,6 +36,8 @@ export const useProductStore = defineStore('product', {
 
       try {
         const response = await getAllProducts({ limit, offset })
+        console.log('🚀 ~ fetchProducts ~ response:', response)
+
         this.products = response.results
         this.count = response.count
         this.next = response.next

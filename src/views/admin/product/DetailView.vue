@@ -178,7 +178,7 @@ const submitForm = async () => {
     } else {
       await productStore.createProduct(product.value)
     }
-    router.push({ name: 'ProductList' })
+    router.push({ name: 'products' })
   } catch (error) {
     console.error('Error submitting form:', error)
   }

@@ -14,13 +14,13 @@ export interface ProductBody {
 }
 
 // Fetch all products
-export const getAllProducts = async (query: { limit?: number; offset?: number }) => {
+export const getAllProducts = async (query: { limit?: number; offset?: number }): Promise<any> => {
   try {
     const response = await api.products.productsProductsList(query)
-    return response.data // Return the product data
+    return response.data
   } catch (error) {
     console.error('Failed to fetch products:', error)
-    throw error
+    throw new Error('Failed to fetch products')
   }
 }
 

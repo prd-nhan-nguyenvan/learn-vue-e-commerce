@@ -1,6 +1,6 @@
 <template>
   <div class="card w-100 my-2 shadow-2-strong">
-    <router-link :to="{ name: 'ProductDetail', params: { slug: product.slug } }"
+    <router-link :to="{ name: 'productDetail', params: { slug: product.slug } }"
       ><div class="image-container">
         <img v-if="product.image" :src="product.image" class="card-img-top" />
         <img
