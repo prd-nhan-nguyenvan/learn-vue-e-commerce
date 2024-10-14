@@ -1,28 +1,28 @@
 <template>
   <div class="container mt-5">
-    <h2>{{ isEdit ? 'Edit Product' : 'Add New Product' }}</h2>
-    <form @submit.prevent="submitForm">
-      <!-- Form fields (Category, Name, Description, Price, Sell Price, On Sale, Stock) -->
-      <div class="mb-3">
-        <label for="category" class="form-label">Category</label>
-        <select v-model="product.category" class="form-select" id="category" required>
-          <option disabled value="">Select a category</option>
-          <option v-for="category in categories" :key="category.id" :value="category.id">
-            {{ category.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="name" class="form-label">Product Name</label>
-        <input
-          type="text"
-          v-model="product.name"
-          class="form-control"
-          id="name"
-          placeholder="Enter product name"
-          required
-        />
+    <h2 class="text-center mb-4">{{ isEdit ? 'Edit Product' : 'Add New Product' }}</h2>
+    <form @submit.prevent="submitForm" class="shadow p-4 rounded bg-light">
+      <div class="row">
+        <div class="mb-3 col-4">
+          <label for="category" class="form-label">Category</label>
+          <select v-model="product.category" class="form-select" id="category" required>
+            <option disabled value="">Select a category</option>
+            <option v-for="category in categories" :key="category.id" :value="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3 col-8">
+          <label for="name" class="form-label">Product Name</label>
+          <input
+            type="text"
+            v-model="product.name"
+            class="form-control"
+            id="name"
+            placeholder="Enter product name"
+            required
+          />
+        </div>
       </div>
 
       <div class="mb-3">
@@ -37,48 +37,50 @@
         ></textarea>
       </div>
 
-      <div class="mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input
-          type="text"
-          v-model="product.price"
-          class="form-control"
-          id="price"
-          placeholder="Enter product price"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
-        <label for="sell_price" class="form-label">Sell Price</label>
-        <input
-          type="text"
-          v-model="product.sell_price"
-          class="form-control"
-          id="sell_price"
-          placeholder="Enter product sell price"
-          required
-        />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-check-label" for="on_sell">On Sale</label>
-        <div class="form-check">
-          <input type="checkbox" v-model="product.on_sell" class="form-check-input" id="on_sell" />
-          <label class="form-check-label" for="on_sell">Is this product on sale?</label>
+      <div class="row align-items-center">
+        <div class="mb-3 col-3">
+          <label for="price" class="form-label">Price</label>
+          <input
+            type="text"
+            v-model="product.price"
+            class="form-control"
+            id="price"
+            placeholder="Enter product price"
+            required
+          />
         </div>
-      </div>
+        <div class="mb-3 col-3">
+          <label for="sell_price" class="form-label">Sell Price</label>
+          <input
+            type="text"
+            v-model="product.sell_price"
+            class="form-control"
+            id="sell_price"
+            placeholder="Enter product sell price"
+            required
+          />
+        </div>
+        <div class="mb-3 col d-flex flex-column align-items-center">
+          <label class="form-label" for="on_sell">On sale?</label>
+          <input
+            type="checkbox"
+            v-model="product.on_sell"
+            class="form-check-input me-2"
+            id="on_sell"
+          />
+        </div>
 
-      <div class="mb-3">
-        <label for="stock" class="form-label">Stock</label>
-        <input
-          type="number"
-          v-model="product.stock"
-          class="form-control"
-          id="stock"
-          placeholder="Enter product stock"
-          required
-        />
+        <div class="mb-3 col-3">
+          <label for="stock" class="form-label">Stock</label>
+          <input
+            type="number"
+            v-model="product.stock"
+            class="form-control"
+            id="stock"
+            placeholder="Enter product stock"
+            required
+          />
+        </div>
       </div>
 
       <div class="mb-3">
@@ -90,13 +92,21 @@
           id="image"
           accept="image/*"
         />
+        <div v-if="isEdit && product.image" class="mt-3">
+          <img
+            :src="product.image"
+            alt="Product Image"
+            class="img-thumbnail"
+            style="max-width: 100px; max-height: 100px"
+          />
+        </div>
       </div>
 
       <div v-if="imageError" class="alert alert-danger">
         {{ imageError }}
       </div>
 
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary w-100">
         {{ isEdit ? 'Update Product' : 'Add Product' }}
       </button>
     </form>
