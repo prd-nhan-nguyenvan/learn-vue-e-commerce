@@ -35,6 +35,7 @@
         <thead class="table-dark">
           <tr>
             <th scope="col" class="text-nowrap">#</th>
+            <th scope="col" class="text-nowrap">Actions</th>
             <th scope="col" class="text-nowrap">Image</th>
             <th scope="col" class="text-nowrap">Name</th>
             <th scope="col" class="text-nowrap">Description</th>
@@ -45,12 +46,29 @@
             <th scope="col" class="text-nowrap">Stock</th>
             <th scope="col" class="text-nowrap">Created At</th>
             <th scope="col" class="text-nowrap">Updated At</th>
-            <th scope="col" class="text-nowrap">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(product, index) in products" :key="product.id">
             <th scope="row">{{ index + 1 }}</th>
+            <td>
+              <div class="d-flex justify-content-center">
+                <router-link
+                  :to="{ name: 'editProduct', params: { id: product.id } }"
+                  class="btn btn-sm btn-outline-warning me-2"
+                  title="Edit Product"
+                >
+                  <i class="material-icons">edit</i>
+                </router-link>
+                <button
+                  @click="product.id !== undefined && deleteProduct(product.id)"
+                  class="btn btn-sm btn-outline-danger"
+                  title="Delete Product"
+                >
+                  <i class="material-icons">delete</i>
+                </button>
+              </div>
+            </td>
             <td>
               <img
                 v-if="product.image"
@@ -83,22 +101,6 @@
             </td>
             <td class="text-nowrap">
               {{ product.updated_at ? formatDate(product.updated_at) : 'N/A' }}
-            </td>
-            <td>
-              <div class="d-flex">
-                <router-link
-                  :to="{ name: 'editProduct', params: { id: product.id } }"
-                  class="btn btn-sm btn-warning me-2"
-                >
-                  <i class="material-icons">edit</i>
-                </router-link>
-                <button
-                  @click="product.id !== undefined && deleteProduct(product.id)"
-                  class="btn btn-sm btn-danger"
-                >
-                  <i class="material-icons">delete</i>
-                </button>
-              </div>
             </td>
           </tr>
         </tbody>
