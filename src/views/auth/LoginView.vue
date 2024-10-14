@@ -80,7 +80,9 @@ const password = ref('')
 
 const handleLogin = async () => {
   await authStore.login({ email: email.value, password: password.value })
-  const next = String(router.currentRoute.value.query.next) || 'home'
+  const next = router.currentRoute.value.query.next
+    ? String(router.currentRoute.value.query.next)
+    : 'home'
   if (authStore.isAuthenticated) {
     router.push(next)
   }
