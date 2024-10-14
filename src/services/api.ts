@@ -1114,6 +1114,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         query: query,
         secure: true,
+        type: ContentType.UrlEncoded,
         format: 'json',
         ...params
       }),
@@ -1126,13 +1127,43 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/products/products/
      * @secure
      */
-    productsProductsCreate: (data: Product, params: RequestParams = {}) =>
+    productsProductsCreate: (
+      data: {
+        category: number
+        /**
+         * @minLength 1
+         * @maxLength 255
+         */
+        name: string
+        /**
+         * @format slug
+         * @maxLength 50
+         * @pattern ^[-a-zA-Z0-9_]+$
+         */
+        slug?: string
+        /** @minLength 1 */
+        description: string
+        /** @format decimal */
+        price: string
+        /** @format decimal */
+        sell_price: string
+        on_sell?: boolean
+        /**
+         * @min 0
+         * @max 4294967295
+         */
+        stock: number
+        /** @format binary */
+        image?: File | null
+      },
+      params: RequestParams = {}
+    ) =>
       this.request<Product, any>({
         path: `/products/products/`,
         method: 'POST',
         body: data,
         secure: true,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         format: 'json',
         ...params
       }),
