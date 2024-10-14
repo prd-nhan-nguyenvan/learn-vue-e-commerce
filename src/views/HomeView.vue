@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ProductListView from './products/ProductListView.vue'
+import ProductListView from './products/ListView.vue'
 import { useSystemMessageStore } from '@/stores'
 
 const systemMessageStore = useSystemMessageStore()

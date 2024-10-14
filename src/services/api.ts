@@ -247,6 +247,33 @@ export interface Review {
   updated_at?: string
 }
 
+export interface UserList {
+  /** ID */
+  id?: number
+  /**
+   * Email
+   * @format email
+   * @minLength 1
+   * @maxLength 254
+   */
+  email: string
+  /**
+   * Username
+   * @minLength 1
+   * @maxLength 100
+   */
+  username: string
+  /** Role */
+  role?: 'admin' | 'user' | 'staff'
+  /** Is active */
+  is_active?: boolean
+  /**
+   * Date joined
+   * @format date-time
+   */
+  date_joined?: string
+}
+
 export interface ChangePassword {
   /**
    * Old password
@@ -305,6 +332,66 @@ export interface UserProfile {
   phone_number?: string
   /** Address */
   address?: string
+}
+
+export interface UserSupportDetail {
+  /**
+   * First name
+   * @maxLength 30
+   */
+  first_name?: string
+  /**
+   * Last name
+   * @maxLength 30
+   */
+  last_name?: string
+  /** Bio */
+  bio?: string
+  /**
+   * Profile picture
+   * @format uri
+   */
+  profile_picture?: string | null
+  /**
+   * Phone number
+   * @maxLength 15
+   */
+  phone_number?: string
+  /** Address */
+  address?: string
+}
+
+export interface UserDetail {
+  /** ID */
+  id?: number
+  /**
+   * Email
+   * @format email
+   * @minLength 1
+   * @maxLength 254
+   */
+  email: string
+  /**
+   * Username
+   * @minLength 1
+   * @maxLength 100
+   */
+  username: string
+  /** Role */
+  role?: 'admin' | 'user' | 'staff'
+  /** Is active */
+  is_active?: boolean
+  /**
+   * Date joined
+   * @format date-time
+   */
+  date_joined?: string
+  /**
+   * Last login
+   * @format date-time
+   */
+  last_login?: string | null
+  profile?: UserSupportDetail
 }
 
 export type QueryParamsType = Record<string | number, any>
@@ -1286,6 +1373,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags users
+     * @name UsersList
+     * @request GET:/users/
+     * @secure
+     */
+    usersList: (
+      query?: {
+        /** email */
+        email?: string
+        /** is_active */
+        is_active?: string
+        /** A search term. */
+        search?: string
+        /** Which field to use when ordering the results. */
+        ordering?: string
+        /** Number of results to return per page. */
+        limit?: number
+        /** The initial index from which to return the results. */
+        offset?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<
+        {
+          count: number
+          /** @format uri */
+          next?: string | null
+          /** @format uri */
+          previous?: string | null
+          results: UserList[]
+        },
+        any
+      >({
+        path: `/users/`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
      * @name UsersPasswordChangeUpdate
      * @request PUT:/users/password/change/
      * @secure
@@ -1398,6 +1529,59 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.FormData,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name UsersRead
+     * @request GET:/users/{id}/
+     * @secure
+     */
+    usersRead: (id: number, params: RequestParams = {}) =>
+      this.request<UserDetail, any>({
+        path: `/users/${id}/`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name UsersUpdate
+     * @request PUT:/users/{id}/
+     * @secure
+     */
+    usersUpdate: (id: number, data: UserDetail, params: RequestParams = {}) =>
+      this.request<UserDetail, any>({
+        path: `/users/${id}/`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name UsersPartialUpdate
+     * @request PATCH:/users/{id}/
+     * @secure
+     */
+    usersPartialUpdate: (id: number, data: UserDetail, params: RequestParams = {}) =>
+      this.request<UserDetail, any>({
+        path: `/users/${id}/`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
         format: 'json',
         ...params
       })

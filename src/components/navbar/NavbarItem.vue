@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-item">
+  <li class="nav-item" v-if="isAuthenticated">
     <router-link
       class="nav-link"
       :class="{ active: isActiveRoute(routeName) }"
@@ -12,17 +12,27 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-const props = defineProps({
-  routeName: {
-    type: String,
-    required: true
-  },
-  label: {
-    type: String,
-    required: true
-  }
+interface Props {
+  routeName: string
+  label: string
+  roles?: string[]
+}
+
+const props = defineProps<Props>()
+
+const authStore = useAuthStore()
+
+const isAuthenticated = computed(() => {
+  if (!props.roles) return true
+
+  const userRole = authStore.user?.role
+  if (!userRole) return false
+
+  return props.roles.includes(userRole)
 })
 
 const route = useRoute()

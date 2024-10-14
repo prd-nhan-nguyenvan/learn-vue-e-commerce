@@ -29,15 +29,7 @@ const { fetchCategories } = categoryStore
 
 const recordsOptions = [5, 10, 20, 50]
 
-const currentPage = ref(1)
-const productsPerPage = ref(recordsOptions[1])
-
 const products = computed(() => productStore.products)
-const loading = computed(() => productStore.loading)
-const previous = computed(() => productStore.previous)
-const next = computed(() => productStore.next)
-const error = computed(() => productStore.error)
-const totalPages = computed(() => Math.ceil(productStore.count / productsPerPage.value))
 
 // Methods
 
