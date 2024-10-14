@@ -1368,6 +1368,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params
       })
   }
+  search = {
+    /**
+     * No description
+     *
+     * @tags search
+     * @name SearchUserList
+     * @request GET:/search/user/
+     * @secure
+     */
+    searchUserList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/search/user/`,
+        method: 'GET',
+        secure: true,
+        ...params
+      })
+  }
   users = {
     /**
      * No description
