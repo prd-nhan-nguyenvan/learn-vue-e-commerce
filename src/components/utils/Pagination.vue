@@ -27,14 +27,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, onMounted } from 'vue'
+import { defineEmits, onMounted } from 'vue'
 
 // Define props
-const props = defineProps({
-  currentPage: Number,
-  totalPages: Number,
-  loading: Boolean
-})
+const props = defineProps<{
+  currentPage: number
+  totalPages: number
+  loading: boolean
+}>()
 
 // Define emit
 const emit = defineEmits(['previous', 'next', 'goToPage'])

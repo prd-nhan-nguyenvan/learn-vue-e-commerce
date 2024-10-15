@@ -16,13 +16,13 @@
     <div class="card-body d-flex flex-column">
       <h5 class="card-title">{{ product.name }}</h5>
       <div class="d-flex flex-row align-items-center" v-if="product.on_sell">
-        <h5 class="mb-1 me-2 text-success">{{ formatCurrency(product.sell_price) }}</h5>
+        <h5 class="mb-1 me-2 text-success">{{ formatCurrency(Number(product.sell_price)) }}</h5>
         <span class="text-muted"
-          ><s>{{ formatCurrency(product.price) }}</s></span
+          ><s>{{ formatCurrency(Number(product.price)) }}</s></span
         >
       </div>
       <div class="d-flex flex-row align-items-center" v-else>
-        <h5 class="card-title">{{ formatCurrency(product.price) }}</h5>
+        <h5 class="card-title">{{ formatCurrency(Number(product.price)) }}</h5>
       </div>
       <p class="card-text text-truncate">{{ product.description }}</p>
       <div
@@ -38,14 +38,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import type { Product } from '@/services'
 
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true
-  }
-})
+defineProps<{
+  product: Product
+}>()
 
 const formatCurrency = (price: number) => {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
