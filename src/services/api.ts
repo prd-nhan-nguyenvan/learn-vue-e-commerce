@@ -1172,6 +1172,60 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Products
+     * @name ProductsProductsBulkImportCreate
+     * @request POST:/products/products/bulk-import/
+     * @secure
+     */
+    productsProductsBulkImportCreate: (
+      data: {
+        /**
+         * CSV file with product data
+         * @format binary
+         */
+        file?: File
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/products/products/bulk-import/`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Products
+     * @name ProductsProductsSearchList
+     * @request GET:/products/products/search/
+     * @secure
+     */
+    productsProductsSearchList: (
+      query?: {
+        /** Search query */
+        q?: string
+        /** Limit for pagination */
+        limit?: number
+        /** Offset for pagination */
+        offset?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/products/products/search/`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Products
      * @name ProductsProductsSlugRead
      * @request GET:/products/products/slug/{slug}/
      * @secure
