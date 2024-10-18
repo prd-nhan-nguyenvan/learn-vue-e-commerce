@@ -14,7 +14,7 @@
           :class="['page-item', { active: currentPage === page }]"
           @click="() => emitGoToPage(page)"
         >
-          <span class="page-link">{{ page }}</span>
+          <span class="page-link" v-if="Math.abs(page - currentPage) < 5">{{ page }}</span>
         </li>
 
         <!-- Next Button -->

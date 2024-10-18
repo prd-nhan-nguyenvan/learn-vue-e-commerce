@@ -116,9 +116,20 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Button -->
             <li class="page-item" :class="{ disabled: !previous }" @click="loadPreviousPage">
-              <span class="page-link" aria-hidden="true">&laquo;</span>
+              <span class="page-link" aria-hidden="true">
+                <i class="material-icons">arrow_back</i>
+              </span>
             </li>
-
+            <li
+              v-if="currentPage > 5"
+              :class="['page-item', { active: currentPage === 1 }]"
+              @click="goToPage(1)"
+            >
+              <span class="page-link">{{ 1 }}</span>
+            </li>
+            <li v-if="currentPage > 5" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
             <!-- Page Numbers -->
             <li
               v-for="page in totalPages"
@@ -126,12 +137,25 @@
               :class="['page-item', { active: currentPage === page }]"
               @click="goToPage(page)"
             >
-              <span class="page-link">{{ page }}</span>
+              <span class="page-link" v-if="Math.abs(page - currentPage) < 5">{{ page }}</span>
             </li>
 
-            <!-- Next Button -->
+            <li v-if="currentPage < totalPages - 4" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
+
+            <li
+              v-if="currentPage < totalPages - 4"
+              :class="['page-item', { active: currentPage === totalPages }]"
+              @click="goToPage(totalPages)"
+            >
+              <span class="page-link">{{ totalPages }}</span>
+            </li>
+
             <li class="page-item" :class="{ disabled: !next }" @click="loadNextPage">
-              <span class="page-link" aria-hidden="true">&raquo;</span>
+              <span class="page-link" aria-hidden="true">
+                <i class="material-icons">arrow_forward</i>
+              </span>
             </li>
           </ul>
         </nav>
