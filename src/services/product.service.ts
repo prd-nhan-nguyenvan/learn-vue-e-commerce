@@ -13,6 +13,10 @@ export interface ProductBody {
   image?: File | null | undefined
 }
 
+export interface ProductFile {
+  file: File
+}
+
 // Fetch all products
 export const getAllProducts = async (query: { limit?: number; offset?: number }): Promise<any> => {
   try {
@@ -37,6 +41,17 @@ export const getProductBySlug = async (slug: string) => {
 export const addNewProduct = async (productData: ProductBody) => {
   try {
     const response = await api.products.productsProductsCreate(productData)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export const bulkImportProduct = async (productFile: ProductFile) => {
+  try {
+    const response = await api.products.productsProductsBulkImportCreate(productFile)
 
     return response.data
   } catch (error) {

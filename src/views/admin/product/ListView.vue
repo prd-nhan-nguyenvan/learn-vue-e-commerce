@@ -2,9 +2,14 @@
   <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="h3">Products</h1>
-      <router-link :to="{ name: 'addProduct' }" class="btn btn-primary"
-        >Add New Product</router-link
-      >
+      <div>
+        <router-link :to="{ name: 'addProduct' }" class="btn btn-primary me-2"
+          >Add New Product</router-link
+        >
+        <button @click="handleBulkImportProducts" class="btn btn-outline-success">
+          Bulk Import Products
+        </button>
+      </div>
     </div>
 
     <div v-if="loading" class="text-center">
@@ -141,6 +146,7 @@ import { useProductStore } from '@/stores/product'
 import { useCategoryStore } from '@/stores/category'
 import { computed, onMounted, ref } from 'vue'
 import Swal from 'sweetalert2'
+import type { ProductFile } from '@/services/product.service'
 
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()
@@ -222,6 +228,44 @@ const loadPreviousPage = () => {
 const handleRecordsChange = () => {
   currentPage.value = 1 // Reset to the first page on records change
   productStore.fetchProducts(productsPerPage.value, 0)
+}
+
+const handleBulkImportProducts = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.csv'
+
+  input.onchange = async (event) => {
+    const target = event.target as HTMLInputElement
+    if (target && target.files && target.files[0]) {
+      const file = target.files[0]
+      if (file) {
+        const productFile: ProductFile = {
+          file: file
+        }
+        try {
+          const response = await productStore.bulkImportProduct(productFile) // Adjust according to your API call
+          console.log('🚀 ~ input.onchange= ~ response:', response)
+          Swal.fire({
+            title: 'Success!',
+            text: 'Products imported successfully.',
+            icon: 'success',
+            timer: 2000
+          })
+        } catch (error) {
+          Swal.fire({
+            title: 'Error!',
+            text: 'There was an error importing the products.',
+            icon: 'error',
+            timer: 2000
+          })
+        }
+      }
+    }
+  }
+
+  // Trigger file input click
+  input.click()
 }
 
 onMounted(() => {

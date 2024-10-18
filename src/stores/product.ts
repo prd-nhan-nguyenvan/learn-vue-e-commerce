@@ -5,7 +5,8 @@ import {
   getProductById as apiGetProductById,
   updateProduct as apiUpdateProduct,
   deleteProduct as apiDeleteProduct,
-  getProductBySlug as apiGetProductBySlug
+  getProductBySlug as apiGetProductBySlug,
+  bulkImportProduct as apiBulkImportProduct
 } from '@/services/product.service'
 import { defineStore } from 'pinia'
 
@@ -79,6 +80,21 @@ export const useProductStore = defineStore('product', {
       } catch (error) {
         this.error = 'Failed to add product'
         console.error('Failed to add product', { error })
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async bulkImportProduct(productFile: any) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const response = await apiBulkImportProduct(productFile)
+        return response
+      } catch (error) {
+        this.error = 'Failed to import products'
+        console.error('Error importing products:', error)
       } finally {
         this.loading = false
       }
