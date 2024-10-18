@@ -220,6 +220,22 @@ export interface Product {
   updated_at?: string
 }
 
+export interface ProductSearchResponse {
+  /** Count */
+  count: number
+  /**
+   * Next
+   * @minLength 1
+   */
+  next?: string | null
+  /**
+   * Previous
+   * @minLength 1
+   */
+  previous?: string | null
+  results: Product[]
+}
+
 export interface Review {
   /** ID */
   id?: number
@@ -1214,11 +1230,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {}
     ) =>
-      this.request<void, any>({
+      this.request<ProductSearchResponse, void>({
         path: `/products/products/search/`,
         method: 'GET',
         query: query,
         secure: true,
+        format: 'json',
         ...params
       }),
 

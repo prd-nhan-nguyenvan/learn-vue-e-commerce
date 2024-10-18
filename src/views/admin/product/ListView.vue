@@ -2,7 +2,19 @@
   <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="h3">Products</h1>
-      <div>
+      <div class="d-flex">
+        <div class="d-flex">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            v-model="searchTerm"
+          />
+          <button class="btn btn-outline-success" type="submit" @click="handleSearch">
+            Search
+          </button>
+        </div>
         <router-link :to="{ name: 'addProduct' }" class="btn btn-primary me-2"
           >Add New Product</router-link
         >
@@ -181,7 +193,7 @@ const { fetchCategories } = categoryStore
 const recordsOptions = [5, 10, 20, 50]
 
 const currentPage = ref(1)
-const productsPerPage = ref(recordsOptions[1])
+const productsPerPage = ref(recordsOptions[2])
 
 const products = computed(() => productStore.products)
 const loading = computed(() => productStore.loading)
@@ -291,7 +303,15 @@ const handleBulkImportProducts = () => {
   // Trigger file input click
   input.click()
 }
-
+const searchTerm = ref('')
+const handleSearch = () => {
+  const query = {
+    q: searchTerm.value,
+    limit: productsPerPage.value,
+    offset: 0
+  }
+  productStore.searchProducts(query)
+}
 onMounted(() => {
   console.log('Loading Products...')
   fetchProducts()

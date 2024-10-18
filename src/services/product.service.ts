@@ -60,6 +60,16 @@ export const bulkImportProduct = async (productFile: ProductFile) => {
   }
 }
 
+export const productSearch = async (query: { q: string; limit?: number; offset?: number }) => {
+  try {
+    const response = await api.products.productsProductsSearchList(query)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
 export const getProductById = async (productId: number) => {
   try {
     const response = await api.products.productsProductsRead(productId)
