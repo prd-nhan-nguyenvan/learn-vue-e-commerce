@@ -13,36 +13,25 @@
         :key="product.id"
         class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
       >
-        <ProductCart :product="product" />
+        <ProductCard :product="product" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { useProductStore } from '@/stores/product'
-import { useCategoryStore } from '@/stores/category'
-import { computed, onMounted, ref } from 'vue'
-import ProductCart from './components/ProductCart.vue'
-import Swal from 'sweetalert2'
+import { useCategoryStore, useProductStore } from '@/stores'
+import { computed, onMounted } from 'vue'
+import ProductCard from '@/views/products/components/ProductCard.vue'
 
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()
 
-const { fetchProducts } = productStore
-const { fetchCategories } = categoryStore
-
-const recordsOptions = [5, 10, 20, 50]
-
 const products = computed(() => productStore.products)
 
-// Methods
-
 onMounted(() => {
-  console.log('Loading Products...')
-  fetchProducts()
+  productStore.fetchProducts()
 
-  console.log('Loading Categories...')
-  fetchCategories()
+  categoryStore.fetchCategories()
 })
 </script>
 

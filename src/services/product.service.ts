@@ -1,6 +1,10 @@
 import { api } from '.'
 import { ContentType, type Category, type Product } from './api'
 
+export interface EnhancedProduct extends Product {
+  id: number
+  slug: string
+}
 export interface ProductBody {
   category: number
   name: string
@@ -123,7 +127,7 @@ export const getCategoryById = async (id: number) => {
     const response = await api.products.productsCategoriesRead(id)
     return response.data
   } catch (error) {
-    console.log(error)
+    console.error(error)
     throw error
   }
 }

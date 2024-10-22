@@ -111,8 +111,6 @@ const loading = ref(false)
 const error = ref<SignupError | null>(null)
 
 const handleSignup = async () => {
-  console.log('🚀 ~ registerData:', registerData.value)
-  console.log('Calling...')
   loading.value = true
   error.value = null
   try {
@@ -124,8 +122,6 @@ const handleSignup = async () => {
       confirmButtonText: 'OK'
     })
 
-    // Redirect to the login page (assuming your router is set up correctly)
-    // Replace 'login' with your actual login route name
     router.push({ name: 'login' })
   } catch (err: any) {
     error.value = err
@@ -149,10 +145,7 @@ const handleSignup = async () => {
       if (error.value.password[0].includes('common'))
         error.value.password = ['Password is too common!']
     }
-
-    console.log('error :>> ', error.value)
   } finally {
-    console.log('Finish!!!')
     loading.value = false
   }
 }

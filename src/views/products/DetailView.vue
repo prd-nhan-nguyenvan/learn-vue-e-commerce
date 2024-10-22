@@ -1,8 +1,6 @@
 <template>
   <div class="container mt-5">
-    <!--Grid row-->
-    <div class="row">
-      <!--Grid column-->
+    <div class="row" v-if="product">
       <div class="col-md-6 mb-4">
         <img
           :src="
@@ -14,15 +12,14 @@
           alt=""
         />
       </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
       <div class="col-md-6 mb-4">
-        <!--Content-->
         <div class="p-4 border rounded shadow-sm">
+          <h2 class="mb-4">{{ product?.name }}</h2>
           <div class="mb-3">
             <a href="">
-              <span class="badge bg-dark me-1" v-if="!loading">{{ categoryName }}</span>
+              <span class="badge bg-dark me-1" v-if="!loading">{{
+                getCategoryName(product?.category)
+              }}</span>
             </a>
             <a href="">
               <span class="badge bg-info me-1">New</span>
@@ -48,81 +45,35 @@
             {{ product?.description }}
           </p>
 
-          <form class="d-flex justify-content-left align-items-center">
-            <!-- Default input -->
-            <div class="form-outline me-1" style="width: 100px">
-              <input type="number" value="1" class="form-control" />
-            </div>
-            <button class="btn btn-primary ms-1">
-              Add to cart
-              <i class="fas fa-shopping-cart ms-1"></i>
-            </button>
-          </form>
+          <button
+            class="btn btn-primary ms-1"
+            @click="handleAddToCard(product)"
+            v-if="!itemQuantity"
+          >
+            Add to cart
+            <i class="fas fa-shopping-cart ms-1"></i>
+          </button>
+          <button class="btn btn-secondary ms-1" disabled v-else>
+            Already in cart
+            <i class="fas fa-check ms-1"></i>
+          </button>
         </div>
       </div>
     </div>
 
     <hr />
 
-    <!--Grid row-->
-    <div class="row d-flex justify-content-center">
-      <!--Grid column-->
-      <div class="col-md-6 text-center">
-        <h4 class="my-4 h4">Additional information</h4>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo
-          soluta odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias
-          illo neque eum in laborum.
-        </p>
-      </div>
-      <!--Grid column-->
-    </div>
-    <!--Grid row-->
-
-    <!--Grid row-->
-    <div class="row">
-      <!--Grid column-->
-      <div class="col-lg-4 col-md-12 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-      <!--Grid column-->
-    </div>
-    <!--Grid row-->
+    <!-- Relative Products -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { useCategoryStore } from '@/stores/category'
-import { useProductStore } from '@/stores/product'
+import { useCartStore, useCategoryStore, useProductStore } from '@/stores'
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
-import { formatCurrency, getCategoryName } from '@/helpers'
+import { addToCartHelper, formatCurrency, getCategoryName } from '@/helpers'
+import type { EnhancedProduct } from '@/services/product.service'
 
 const loading = ref(false)
 
@@ -131,33 +82,15 @@ const categoryStore = useCategoryStore()
 const route = useRoute()
 
 const product = computed(() => productStore.selectedProduct)
-const categoryName = ref('')
 
-const fetchCategoryName = async () => {
-  const category = product.value?.category
-  if (category) {
-    loading.value = true
-    categoryName.value = await getCategoryName(category)
-    loading.value = false
-  }
+const router = useRouter()
+
+const handleAddToCard = (product: EnhancedProduct) => {
+  addToCartHelper(product, router)
 }
+const cartStore = useCartStore()
 
-onMounted(async () => {
-  await categoryStore.fetchCategories()
-  try {
-    const slug = route.params.slug
-    if (typeof slug === 'string') {
-      await productStore.getProductBySlug(slug)
-      await fetchCategoryName()
-    } else {
-      console.error('Invalid slug:', slug)
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error)
-  }
-})
-
-console.log('🚀 ~ categoryName ~ categoryName:', categoryName)
+const itemQuantity = computed(() => cartStore.itemQuantity(product.value?.id || 0))
 
 onMounted(async () => {
   await categoryStore.fetchCategories()

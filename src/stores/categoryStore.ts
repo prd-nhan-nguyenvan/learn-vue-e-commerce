@@ -1,20 +1,17 @@
+import { defineStore } from 'pinia'
+
 import {
   addNewCategory,
   deleteCategory,
   getAllCategories,
   updateCategory
 } from '@/services/product.service'
-import type { Category } from './../services/api'
-import { defineStore } from 'pinia'
 
-interface CategoryList {
-  categories: Category[]
-  loading: boolean
-  error: string | null
-}
+import type { Category } from '@/services/api'
+import type { CategoryState } from '@/stores/types'
 
 export const useCategoryStore = defineStore('category', {
-  state: (): CategoryList => ({
+  state: (): CategoryState => ({
     categories: [],
     loading: false,
     error: null
@@ -26,14 +23,12 @@ export const useCategoryStore = defineStore('category', {
 
       try {
         const response = await getAllCategories()
-        console.log('API response:', response)
         this.categories = response
       } catch (error) {
         this.error = 'Failed to load categories'
         console.error('Error fetching categories:', error)
       } finally {
         this.loading = false
-        console.log('Loading state:', this.loading)
       }
     },
 
@@ -56,7 +51,6 @@ export const useCategoryStore = defineStore('category', {
       this.loading = true
       this.error = null
       if (!updatedCategory.id) return
-      console.log('This is updating from store...', updateCategory)
       try {
         const response = await updateCategory(updatedCategory.id, updatedCategory)
         const index = this.categories.findIndex((category) => category.id === updatedCategory.id)

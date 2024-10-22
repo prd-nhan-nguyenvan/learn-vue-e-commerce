@@ -28,30 +28,45 @@
       <div
         class="card-footer d-flex justify-content-between align-items-center pt-3 px-0 pb-0 mt-auto border-0 bg-white"
       >
-        <a href="#!" class="btn btn-primary shadow-0">Add to cart</a>
-        <a href="#!" class="btn btn-outline-secondary border-0 icon-hover">
-          <i class="fas fa-heart fa-lg text-secondary"></i>
-        </a>
+        <button
+          class="btn btn-primary ms-1"
+          @click="handleAddToCard(product)"
+          v-if="!itemQuantity(product.id)"
+        >
+          Add to cart
+          <i class="fas fa-shopping-cart ms-1"></i>
+        </button>
+        <button class="btn btn-secondary ms-1" disabled v-else>
+          Already in cart
+          <i class="fas fa-check ms-1"></i>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Product } from '@/services'
+import { formatCurrency } from '@/helpers'
+import type { EnhancedProduct } from '@/services/product.service'
+import { addToCartHelper } from '@/helpers'
+import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores'
 
 defineProps<{
-  product: Product
+  product: EnhancedProduct
 }>()
 
-const formatCurrency = (price: number) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
+const router = useRouter()
+const cartStore = useCartStore()
+const itemQuantity = (id: number) => cartStore.itemQuantity(id)
+const handleAddToCard = (product: EnhancedProduct) => {
+  addToCartHelper(product, router)
 }
 </script>
 
 <style scoped>
 .image-container {
-  height: 250px; /* Set your desired fixed height */
+  height: 250px;
   overflow: hidden;
 }
 

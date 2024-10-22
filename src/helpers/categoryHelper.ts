@@ -5,7 +5,6 @@ export const getCategoryName = (categoryId: number | undefined): Promise<string>
 
   return getCategoryById(categoryId)
     .then((category) => {
-      console.log('🚀 ~ getCategoryName ~ category:', category)
       return category ? category.name : 'Unknown'
     })
     .catch(() => 'Unknown')

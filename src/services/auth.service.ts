@@ -10,8 +10,6 @@ export const login = async (loginData: Login) => {
       }
     })
 
-    console.log({ data: response?.data })
-
     return response.data
   } catch (error) {
     console.error('Login error:', error)
@@ -24,10 +22,7 @@ export const logout = async () => {
     await api.auth.authLogoutCreate()
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
-
-    console.log('User logged out successfully')
   } catch (err) {
-    console.log('🚀 ~ logout ~ err:', err)
     throw new Error('Logout failed...')
   }
 }

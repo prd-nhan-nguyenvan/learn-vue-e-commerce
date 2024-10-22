@@ -125,9 +125,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCategoryStore } from '@/stores/category'
+import { useCategoryStore } from '@/stores'
+import type { Category } from '@/services'
 import { onMounted, computed, ref } from 'vue'
-import type { Category } from '@/services/api'
 import Swal from 'sweetalert2'
 
 const categoryStore = useCategoryStore()

@@ -18,6 +18,8 @@ const CategoryListView = () => import('@/views/admin/category/ListView.vue')
 const UserListView = () => import('@/views/admin/user/ListView.vue')
 const UserDetailView = () => import('@/views/admin/user/DetailView.vue')
 
+const CartView = () => import('@/views/user/CartView.vue')
+
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,6 +47,14 @@ export const router = createRouter({
       component: ChangePasswordView,
       meta: { requiresAuth: true, role: ALL_ROLE }
     },
+
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
+      meta: { requiresAuth: true, role: ALL_ROLE }
+    },
+
     {
       path: '/admin',
       meta: { requiresAuth: true, role: [ROLE_ADMIN, ROLE_STAFF] },

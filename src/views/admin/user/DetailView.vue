@@ -94,7 +94,6 @@ const profile = computed(() => userStore.selectedUser?.profile)
 
 onMounted(async () => {
   const id = Number(route.params.id)
-  console.log('Loading...')
   try {
     await userStore.getUserById(id)
   } catch (error) {

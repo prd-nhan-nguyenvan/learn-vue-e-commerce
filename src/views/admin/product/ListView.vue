@@ -191,8 +191,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useProductStore } from '@/stores/product'
-import { useCategoryStore } from '@/stores/category'
+import { useCategoryStore, useProductStore } from '@/stores'
 import { computed, onMounted, ref } from 'vue'
 import Swal from 'sweetalert2'
 import type { ProductFile } from '@/services/product.service'
@@ -294,7 +293,6 @@ const handleBulkImportProducts = () => {
         }
         try {
           const response = await productStore.bulkImportProduct(productFile) // Adjust according to your API call
-          console.log('🚀 ~ input.onchange= ~ response:', response)
           Swal.fire({
             title: 'Success!',
             text: 'Products imported successfully.',
@@ -326,10 +324,7 @@ const handleSearch = () => {
   productStore.searchProducts(query)
 }
 onMounted(() => {
-  console.log('Loading Products...')
   fetchProducts()
-
-  console.log('Loading Categories...')
   fetchCategories()
 })
 </script>

@@ -57,8 +57,4 @@ const emitGoToPage = (page: number) => {
     emit('goToPage', page)
   }
 }
-
-onMounted(() => {
-  console.log(props.totalPages)
-})
 </script>

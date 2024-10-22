@@ -79,6 +79,23 @@ export interface RefreshToken {
   refresh: string
 }
 
+export interface CartItem {
+  /** ID */
+  id?: number
+  /** Product */
+  product: number
+  /**
+   * Quantity
+   * @min 0
+   * @max 4294967295
+   */
+  quantity?: number
+}
+
+export interface Cart {
+  items?: CartItem[]
+}
+
 export interface AddToCart {
   /** Product id */
   product_id: number
@@ -736,7 +753,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   }
   carts = {
     /**
-     * No description
+     * @description Retrieve the cart for the logged-in user
      *
      * @tags Cart
      * @name CartsList
@@ -744,24 +761,44 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     cartsList: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        Cart,
+        {
+          /** @example "Authentication credentials were not provided." */
+          detail?: string
+        }
+      >({
         path: `/carts/`,
         method: 'GET',
         secure: true,
+        format: 'json',
         ...params
       }),
 
     /**
-     * No description
+     * @description Add an item to the cart
      *
      * @tags Cart
-     * @name CartsAddCreate
-     * @request POST:/carts/add/
+     * @name CartsItemsCreate
+     * @request POST:/carts/items/
      * @secure
      */
-    cartsAddCreate: (data: AddToCart, params: RequestParams = {}) =>
-      this.request<AddToCart, any>({
-        path: `/carts/add/`,
+    cartsItemsCreate: (data: AddToCart, params: RequestParams = {}) =>
+      this.request<
+        {
+          /** @example "Item added to cart successfully" */
+          message?: string
+          cart_item?: any
+        },
+        | {
+            detail?: object
+          }
+        | {
+            /** @example "Authentication credentials were not provided." */
+            detail?: string
+          }
+      >({
+        path: `/carts/items/`,
         method: 'POST',
         body: data,
         secure: true,
@@ -771,16 +808,61 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description Update the quantity of an item in the cart
      *
      * @tags Cart
-     * @name CartsRemoveDelete
-     * @request DELETE:/carts/remove/{product_id}/
+     * @name CartsItemsPartialUpdate
+     * @request PATCH:/carts/items/{product_id}/
      * @secure
      */
-    cartsRemoveDelete: (productId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/carts/remove/${productId}/`,
+    cartsItemsPartialUpdate: (
+      productId: string,
+      data: {
+        /**
+         * @min 1
+         * @example 1
+         */
+        quantity?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<
+        {
+          /** @example "Cart item updated successfully" */
+          message?: string
+          cart_item?: any
+        },
+        {
+          /** @example "Item not found in cart." */
+          detail?: string
+        }
+      >({
+        path: `/carts/items/${productId}/`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * @description Remove an item from the cart
+     *
+     * @tags Cart
+     * @name CartsItemsDelete
+     * @request DELETE:/carts/items/{product_id}/
+     * @secure
+     */
+    cartsItemsDelete: (productId: string, params: RequestParams = {}) =>
+      this.request<
+        void,
+        {
+          /** @example "Item not found in cart." */
+          detail?: string
+        }
+      >({
+        path: `/carts/items/${productId}/`,
         method: 'DELETE',
         secure: true,
         ...params

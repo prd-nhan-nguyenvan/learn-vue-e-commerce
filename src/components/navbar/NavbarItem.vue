@@ -1,12 +1,14 @@
 <template>
   <li class="nav-item" v-if="isAuthenticated">
     <router-link
-      class="nav-link"
+      class="nav-link position-relative"
       :class="{ active: isActiveRoute(routeName) }"
       :to="{ name: routeName }"
       aria-current="page"
     >
-      {{ label }}
+      <i v-if="icon" class="material-icons">{{ icon }}</i>
+      <span v-else>{{ label }}</span>
+      <slot></slot>
     </router-link>
   </li>
 </template>
@@ -19,6 +21,7 @@ import { useRoute } from 'vue-router'
 interface Props {
   routeName: string
   label: string
+  icon?: string
   roles?: string[]
 }
 

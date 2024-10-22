@@ -1,25 +1,18 @@
-import type { UserDetail, UserList } from '@/services'
 import { defineStore } from 'pinia'
-import {
-  getUserList as apiGetAllUser,
-  getUserById as apiGetUserByID,
-  blockUser as apiBlockUser,
-  type userListQuery
-} from '@/services/user.service'
-import { ROLE_ADMIN } from '@/helpers'
 
-interface UserPagingList {
-  users: UserList[]
-  selectedUser: UserDetail | null
-  count: number
-  next: string | null | undefined
-  previous: string | null | undefined
-  loading: boolean
-  error: string | null
-}
+import { ROLE_ADMIN } from '@/helpers'
+import {
+  blockUser as apiBlockUser,
+  getUserById as apiGetUserByID,
+  getUserList as apiGetAllUser
+} from '@/services/user.service'
+
+import type { UserList } from '@/services'
+import type { userListQuery } from '@/services/user.service'
+import type { UserPagingList as userStoreState } from './types'
 
 export const useUserStore = defineStore('user', {
-  state: (): UserPagingList => ({
+  state: (): userStoreState => ({
     users: [],
     selectedUser: null,
     count: 0,
@@ -44,7 +37,6 @@ export const useUserStore = defineStore('user', {
         console.error('Error fetching products:', error)
       } finally {
         this.loading = false
-        console.log('Loading state:', this.loading) // Log the loading state
       }
     },
 
