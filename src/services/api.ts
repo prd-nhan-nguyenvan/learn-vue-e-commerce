@@ -1513,6 +1513,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Products
+     * @name ProductsProductsSimilarList
+     * @request GET:/products/products/{product_id}/similar/
+     * @secure
+     */
+    productsProductsSimilarList: (
+      productId: string,
+      query?: {
+        /** Limit for pagination */
+        limit?: number
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<ProductSearchResponse, void>({
+        path: `/products/products/${productId}/similar/`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
      * @tags Review
      * @name ProductsReviewsCreate
      * @request POST:/products/reviews/
