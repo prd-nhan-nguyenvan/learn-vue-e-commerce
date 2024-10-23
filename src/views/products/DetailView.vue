@@ -63,55 +63,18 @@
 
     <hr />
 
-    <!-- More detail -->
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-6 text-center">
-        <h4 class="my-4 h4">Additional information</h4>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo
-          soluta odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias
-          illo neque eum in laborum.
-        </p>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-4 col-md-12 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-
-      <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-
-      <div class="col-lg-4 col-md-6 mb-4">
-        <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
-          class="img-fluid rounded shadow-sm"
-          alt=""
-        />
-      </div>
-    </div>
     <!-- Similar products -->
     <div class="row d-flex justify-content-center">
       <div class="col-md-6 text-center">
         <h4 class="my-4 h4">Similar products</h4>
       </div>
     </div>
-    <div class="row">
+    <div class="row flex-nowrap overflow-auto">
       <div
         v-for="product in similarProducts"
         :key="product.id"
         class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+        style="flex: 0 0 auto"
       >
         <ProductCard :product="product" />
       </div>
@@ -122,8 +85,8 @@
 <script setup lang="ts">
 import ProductCard from '@/views/products/components/ProductCard.vue'
 
-import { useCartStore, useCategoryStore, useProductStore } from '@/stores'
-import { computed, onMounted, ref } from 'vue'
+import { useCartStore, useProductStore } from '@/stores'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { addToCartHelper, formatCurrency, getCategoryName } from '@/helpers'
@@ -132,12 +95,10 @@ import type { EnhancedProduct } from '@/services/product.service'
 const loading = ref(false)
 
 const productStore = useProductStore()
-const categoryStore = useCategoryStore()
 const route = useRoute()
 
 const product = computed(() => productStore.selectedProduct)
 const similarProducts = computed(() => productStore.similarProducts)
-console.log('🚀 ~ similarProducts:', similarProducts.value)
 
 const router = useRouter()
 
@@ -148,10 +109,10 @@ const cartStore = useCartStore()
 
 const itemQuantity = computed(() => cartStore.itemQuantity(product.value?.id || 0))
 
-onMounted(async () => {
-  await categoryStore.fetchCategories()
+const fetchProduct = async (slug: string) => {
+  loading.value = true
+
   try {
-    const slug = route.params.slug
     if (typeof slug === 'string') {
       await productStore.getProductBySlug(slug)
     } else {
@@ -160,5 +121,18 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching data:', error)
   }
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  loading.value = false
+}
+
+onMounted(async () => {
+  await fetchProduct(route.params.slug as string)
 })
+
+watch(
+  () => route.params.slug,
+  (newSlug) => {
+    fetchProduct(newSlug as string)
+  }
+)
 </script>
