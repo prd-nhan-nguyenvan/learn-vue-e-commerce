@@ -107,10 +107,21 @@
         <h4 class="my-4 h4">Similar products</h4>
       </div>
     </div>
+    <div class="row">
+      <div
+        v-for="product in similarProducts"
+        :key="product.id"
+        class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch"
+      >
+        <ProductCard :product="product" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import ProductCard from '@/views/products/components/ProductCard.vue'
+
 import { useCartStore, useCategoryStore, useProductStore } from '@/stores'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -125,6 +136,8 @@ const categoryStore = useCategoryStore()
 const route = useRoute()
 
 const product = computed(() => productStore.selectedProduct)
+const similarProducts = computed(() => productStore.similarProducts)
+console.log('🚀 ~ similarProducts:', similarProducts.value)
 
 const router = useRouter()
 

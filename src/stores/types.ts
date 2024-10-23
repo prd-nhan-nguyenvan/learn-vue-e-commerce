@@ -9,6 +9,7 @@ export interface ProductListState {
   next: string | null | undefined
   previous: string | null | undefined
   selectedProduct: EnhancedProduct | null
+  similarProducts: EnhancedProduct[]
   loading: boolean
   error: string | null
 }

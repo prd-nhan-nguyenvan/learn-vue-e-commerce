@@ -1,6 +1,7 @@
-import { api } from '.'
-import { ContentType, type Category, type Product } from './api'
+import { api } from './'
+import { ContentType } from './api'
 
+import type { Category, Product } from './api'
 export interface EnhancedProduct extends Product {
   id: number
   slug: string
@@ -67,6 +68,17 @@ export const bulkImportProduct = async (productFile: ProductFile) => {
 export const productSearch = async (query: { q: string; limit?: number; offset?: number }) => {
   try {
     const response = await api.products.productsProductsSearchList(query)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export const getSimilarProducts = async (productId: number) => {
+  try {
+    const productIsString = productId.toString()
+    const response = await api.products.productsProductsSimilarList(productIsString)
     return response.data
   } catch (error) {
     console.error(error)
