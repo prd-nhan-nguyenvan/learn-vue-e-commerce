@@ -63,7 +63,50 @@
 
     <hr />
 
-    <!-- Relative Products -->
+    <!-- More detail -->
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6 text-center">
+        <h4 class="my-4 h4">Additional information</h4>
+
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo
+          soluta odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias
+          illo neque eum in laborum.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-12 mb-4">
+        <img
+          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg"
+          class="img-fluid rounded shadow-sm"
+          alt=""
+        />
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <img
+          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg"
+          class="img-fluid rounded shadow-sm"
+          alt=""
+        />
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <img
+          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg"
+          class="img-fluid rounded shadow-sm"
+          alt=""
+        />
+      </div>
+    </div>
+    <!-- Similar products -->
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6 text-center">
+        <h4 class="my-4 h4">Similar products</h4>
+      </div>
+    </div>
   </div>
 </template>
 
