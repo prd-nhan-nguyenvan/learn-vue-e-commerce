@@ -23,7 +23,14 @@ export interface ProductFile {
 }
 
 // Fetch all products
-export const getAllProducts = async (query: { limit?: number; offset?: number }): Promise<any> => {
+export const getAllProducts = async (query: {
+  category?: string
+  price?: string
+  ordering?: string
+  search?: string
+  limit?: number
+  offset?: number
+}): Promise<any> => {
   try {
     const response = await api.products.productsProductsList(query)
     return response.data

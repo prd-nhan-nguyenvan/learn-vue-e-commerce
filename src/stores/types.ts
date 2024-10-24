@@ -37,6 +37,7 @@ export interface authState {
 
 export interface CategoryState {
   categories: Category[]
-  loading: boolean
   error: string | null
+  isInitialFetch: boolean
+  loading: boolean
 }

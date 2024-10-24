@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from './authGuard'
+
 import { ALL_ROLE, ROLE_ADMIN, ROLE_STAFF } from '@/helpers'
+
+import { authGuard } from './authGuard'
 
 const HomeView = () => import('@/views/HomeView.vue')
 const DashboardView = () => import('@/views/DashboardView.vue')
+const CategoryView = () => import('@/views/CategoryView.vue')
 
 const LoginView = () => import('@/views/auth/LoginView.vue')
 const SignUpView = () => import('@/views/auth/SignUpView.vue')
@@ -28,6 +31,7 @@ export const router = createRouter({
       name: 'home',
       component: HomeView
     },
+    { path: '/:slug', name: 'category', component: CategoryView },
     {
       path: '/products/:slug',
       name: 'productDetail',

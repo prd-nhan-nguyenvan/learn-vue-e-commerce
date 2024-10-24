@@ -28,12 +28,12 @@ export const useProductStore = defineStore('product', {
     error: null
   }),
   actions: {
-    async fetchProducts(limit = 10, offset = 0) {
+    async fetchProducts(limit = 10, offset = 0, category = '') {
       this.loading = true
       this.error = null
 
       try {
-        const response = await apiFetchProducts({ limit, offset })
+        const response = await apiFetchProducts({ limit, offset, category })
 
         this.products = response.results
         this.count = response.count
@@ -45,6 +45,9 @@ export const useProductStore = defineStore('product', {
       } finally {
         this.loading = false
       }
+    },
+    async fetchProductsByCategory(category: number) {
+      await this.fetchProducts(10, 0, String(category))
     },
 
     async searchProducts(query: { q: string; limit?: number; offset?: number }) {

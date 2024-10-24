@@ -14,12 +14,14 @@ export const useCategoryStore = defineStore('category', {
   state: (): CategoryState => ({
     categories: [],
     loading: false,
-    error: null
+    error: null,
+    isInitialFetch: false
   }),
   actions: {
     async fetchCategories() {
       this.loading = true
       this.error = null
+      this.isInitialFetch = true
 
       try {
         const response = await getAllCategories()
@@ -30,6 +32,13 @@ export const useCategoryStore = defineStore('category', {
       } finally {
         this.loading = false
       }
+    },
+    async getCategoryIdBySlug(slug: string) {
+      if (!this.isInitialFetch) {
+        await this.fetchCategories()
+      }
+      const category = this.categories.find((category) => category.slug === slug)
+      return category ? category.id : null
     },
 
     async addCategory(newCategory: Category) {

@@ -3,7 +3,7 @@
   <div class="container py-5">
     <div class="row">
       <div class="col-12 text-center mb-4">
-        <h1 class="display-4">Our Products</h1>
+        <h1 class="display-4">{{ category ? category : 'Our Products' }}</h1>
         <p class="lead">Browse through our exclusive collection</p>
       </div>
     </div>
@@ -22,6 +22,10 @@
 import { useCategoryStore, useProductStore } from '@/stores'
 import { computed, onMounted } from 'vue'
 import ProductCard from '@/views/products/components/ProductCard.vue'
+
+defineProps<{
+  category?: string
+}>()
 
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()

@@ -1,10 +1,11 @@
 <template>
   <div class="container my-5">
     <HeroSection @search="searchProduct"></HeroSection>
-
+    <!-- Category section -->
+    <CategorySection></CategorySection>
     <!-- Product -->
     <div class="featured-products my-5">
-      <ProductListView></ProductListView>
+      <ProductListView :category="category"></ProductListView>
     </div>
 
     <!-- Testimonials -->
@@ -29,11 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import HeroSection from '@/components/HeroSection.vue'
+import HeroSection from '@/components/home/HeroSection.vue'
 import ProductListView from './products/ListView.vue'
 import { useProductStore } from '@/stores'
+import CategorySection from '@/components/home/CategorySection.vue'
+import { onUpdated, ref } from 'vue'
 
 const productStore = useProductStore()
+
+const category = ref('')
 
 const searchProduct = async (searchText: string) => {
   if (!searchText.trim()) {
@@ -44,4 +49,8 @@ const searchProduct = async (searchText: string) => {
   }
   await productStore.searchProducts(query)
 }
+
+onUpdated(() => {
+  category.value = 'All Products'
+})
 </script>
