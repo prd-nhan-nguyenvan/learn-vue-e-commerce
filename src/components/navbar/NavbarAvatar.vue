@@ -13,7 +13,7 @@
         >{{ cartCount }}</span
       >
     </NavbarItem>
-    <div class="nav-item dropdown">
+    <div class="nav-item dropdown align-items-center justify-content-center">
       <a
         class="nav-link d-flex align-items-center"
         href="#"
@@ -22,7 +22,14 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
+        <img
+          v-if="profile?.profile_picture"
+          :src="profile.profile_picture"
+          alt="avatar"
+          class="avatar bg-info text-white d-flex align-items-center justify-content-center me-2"
+        />
         <div
+          v-else
           class="avatar bg-info text-white d-flex align-items-center justify-content-center me-2"
         >
           <span>{{ profile?.first_name?.charAt(0).toUpperCase() || 'O' }}</span>
