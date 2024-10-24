@@ -34,7 +34,7 @@ import HeroSection from '@/components/home/HeroSection.vue'
 import ProductListView from './products/ListView.vue'
 import { useProductStore } from '@/stores'
 import CategorySection from '@/components/home/CategorySection.vue'
-import { onUpdated, ref } from 'vue'
+import { onMounted, onUpdated, ref } from 'vue'
 
 const productStore = useProductStore()
 
@@ -50,7 +50,7 @@ const searchProduct = async (searchText: string) => {
   await productStore.searchProducts(query)
 }
 
-onUpdated(() => {
-  category.value = 'All Products'
+onMounted(() => {
+  // get the category from the route params
 })
 </script>

@@ -24,6 +24,7 @@ export const useProductStore = defineStore('product', {
     previous: null,
     selectedProduct: null,
     similarProducts: [],
+    selectedCategory: null,
     loading: false,
     error: null
   }),
@@ -33,6 +34,9 @@ export const useProductStore = defineStore('product', {
       this.error = null
 
       try {
+        if (category === '') {
+          category = this.selectedCategory || ''
+        }
         const response = await apiFetchProducts({ limit, offset, category })
 
         this.products = response.results
@@ -46,7 +50,30 @@ export const useProductStore = defineStore('product', {
         this.loading = false
       }
     },
+    async loadMore(limit = 10, offset = 0, category = '') {
+      this.loading = true
+      this.error = null
+
+      try {
+        if (category === '') {
+          category = this.selectedCategory || ''
+        }
+        const response = await apiFetchProducts({ limit, offset, category })
+
+        this.products = [...this.products, ...response.results]
+
+        this.count = response.count
+        this.next = response.next
+        this.previous = response.previous
+      } catch (error) {
+        this.error = 'Failed to load products'
+        console.error('Error fetching products:', error)
+      } finally {
+        this.loading = false
+      }
+    },
     async fetchProductsByCategory(category: number) {
+      this.selectedCategory = String(category)
       await this.fetchProducts(10, 0, String(category))
     },
 
