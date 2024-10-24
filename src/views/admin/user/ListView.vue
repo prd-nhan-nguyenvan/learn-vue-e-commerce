@@ -1,7 +1,7 @@
 <template>
-  <main class="container py-4">
+  <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="mb-0">Users</h1>
+      <h1 class="h3 mb-0">Users</h1>
       <div class="input-group w-50">
         <input
           type="text"
