@@ -47,22 +47,15 @@ export const useProductStore = defineStore('product', {
       }
     },
 
-    async searchProducts(query: any) {
+    async searchProducts(query: { q: string; limit?: number; offset?: number }) {
       this.loading = true
       this.error = null
 
       try {
         const response = await apiSearchProducts(query)
-        this.products = response.results
-          .map((product: Product) => {
-            if (typeof product.id === 'number' && typeof product.slug === 'string') {
-              return {
-                ...product
-              }
-            }
-            return undefined
-          })
-          .filter((product): product is EnhancedProduct => product !== undefined)
+        this.products = response.results.map((product: Product) =>
+          convertProductToEnhanced(product)
+        )
         this.count = response.count
         this.next = response.next
         this.previous = response.previous

@@ -1,14 +1,9 @@
 <template>
   <div class="container my-5">
-    <HeroSection />
-    <!-- System Message -->
-    <div v-if="message" class="alert alert-warning text-center" role="alert">
-      {{ message }}
-    </div>
+    <HeroSection @search="searchProduct"></HeroSection>
 
-    <!-- Featured Products -->
+    <!-- Product -->
     <div class="featured-products my-5">
-      <h2 class="text-center">Featured Products</h2>
       <ProductListView></ProductListView>
     </div>
 
@@ -34,11 +29,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import HeroSection from '@/components/HeroSection.vue'
 import ProductListView from './products/ListView.vue'
-import { useSystemMessageStore } from '@/stores'
+import { useProductStore } from '@/stores'
 
-const systemMessageStore = useSystemMessageStore()
-const message = computed(() => systemMessageStore.message)
+const productStore = useProductStore()
+
+const searchProduct = async (searchText: string) => {
+  if (!searchText.trim()) {
+    return
+  }
+  const query: { q: string; limit?: number; offset?: number } = {
+    q: searchText.trim()
+  }
+  await productStore.searchProducts(query)
+}
 </script>
