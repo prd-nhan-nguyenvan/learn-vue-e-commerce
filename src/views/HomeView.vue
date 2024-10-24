@@ -50,7 +50,7 @@ const searchProduct = async (searchText: string) => {
   await productStore.searchProducts(query)
 }
 
-onMounted(() => {
-  // get the category from the route params
+onMounted(async () => {
+  await productStore.setCategory('')
 })
 </script>

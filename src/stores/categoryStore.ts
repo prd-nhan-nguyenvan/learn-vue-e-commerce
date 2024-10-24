@@ -94,5 +94,9 @@ export const useCategoryStore = defineStore('category', {
       this.loading = false
       this.error = null
     }
+  },
+  getters: {
+    getCategoryById: (state) => (id: number) =>
+      state.categories.find((category) => category.id === id)
   }
 })

@@ -13,7 +13,6 @@
 import HeroSection from '@/components/home/HeroSection.vue'
 import ProductListView from './products/ListView.vue'
 import { useCategoryStore, useProductStore } from '@/stores'
-import CategorySection from '@/components/home/CategorySection.vue'
 import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 

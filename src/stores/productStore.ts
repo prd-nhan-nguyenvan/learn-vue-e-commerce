@@ -228,6 +228,9 @@ export const useProductStore = defineStore('product', {
       this.selectedProduct = null
       this.loading = false
       this.error = null
+    },
+    setCategory(category: string): void {
+      this.selectedCategory = category
     }
   }
 })
